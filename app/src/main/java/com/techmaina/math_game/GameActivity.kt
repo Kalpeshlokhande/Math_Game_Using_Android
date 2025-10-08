@@ -52,6 +52,7 @@ class GameActivity : AppCompatActivity() {
 
 
         gameContinue()
+        startTimer()
 
         button.setOnClickListener {
             val input = editTextAnswer.text.toString()
@@ -72,6 +73,14 @@ class GameActivity : AppCompatActivity() {
                     textQuestion.text ="Sorry wrong answer"
                     textLife.text =  userLife.toString()
                 }
+                
+                if(userLife <= 0){
+                    Toast.makeText(applicationContext,"Game Over",Toast.LENGTH_LONG).show()
+                    val intent = Intent(this@GameActivity, ResultActivity::class.java)
+                    intent.putExtra("score",userScore)
+                    startActivity(intent)
+                    finish()
+                }
 
             }
 
@@ -79,19 +88,18 @@ class GameActivity : AppCompatActivity() {
         buttonNext.setOnClickListener {
             pauseTimer()
             resetTimer()
-            gameContinue()
             editTextAnswer.setText("")
-
-            if(userLife == 0){
+            
+            if(userLife <= 0){
                 Toast.makeText(applicationContext,"Game Over",Toast.LENGTH_LONG).show()
                 val intent = Intent(this@GameActivity, ResultActivity::class.java)
                 intent.putExtra("score",userScore)
+                startActivity(intent)
                 finish()
             }else{
                 gameContinue()
-
+                startTimer()
             }
-
         }
     }
     fun gameContinue(){
@@ -109,13 +117,19 @@ class GameActivity : AppCompatActivity() {
             override fun onFinish() {
                 pauseTimer()
                 resetTimer()
-                updateTimer()
+                updateText()
 
                 userLife--
                 textLife.text=userLife.toString()
                 textQuestion.text = "Sorry, Time is up"
-
-
+                
+                if(userLife <= 0){
+                    Toast.makeText(applicationContext,"Game Over",Toast.LENGTH_LONG).show()
+                    val intent = Intent(this@GameActivity, ResultActivity::class.java)
+                    intent.putExtra("score",userScore)
+                    startActivity(intent)
+                    finish()
+                }
             }
 
             override fun onTick(millisUntilFinished: Long) {
@@ -131,8 +145,9 @@ class GameActivity : AppCompatActivity() {
     }
 
     fun updateText(){
-        val remainigTime : Int = (timeLeftInMills/1000).toInt()
-        textTime.text = String.format(Locale.getDefault(),"%02d%",remainigTime)    }
+        val remainingTime : Int = (timeLeftInMills/1000).toInt()
+        textTime.text = String.format(Locale.getDefault(),"%02d",remainingTime)
+    }
     fun pauseTimer(){
         timer.cancel()
     }

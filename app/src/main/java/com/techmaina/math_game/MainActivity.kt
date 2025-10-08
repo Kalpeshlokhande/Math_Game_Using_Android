@@ -9,7 +9,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 
 class MainActivity : AppCompatActivity() {
-    lateinit var addition : Button
+    lateinit var addition :Button
     lateinit var subtraction : Button
     lateinit var multi : Button
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,10 +27,18 @@ class MainActivity : AppCompatActivity() {
         multi = findViewById(R.id.buttonMulti)
 
         addition.setOnClickListener {
-
             val intent = Intent(this@MainActivity, GameActivity::class.java)
             startActivity(intent)
+        }
 
+        subtraction.setOnClickListener {
+            val intent = Intent(this@MainActivity, SubActivity::class.java)
+            startActivity(intent)
+        }
+
+        multi.setOnClickListener {
+            val intent = Intent(this@MainActivity, MultiActivity::class.java)
+            startActivity(intent)
         }
     }
 }

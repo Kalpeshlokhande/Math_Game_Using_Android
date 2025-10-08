@@ -53,6 +53,7 @@ class SubActivity : AppCompatActivity() {
         buttonNext = findViewById(R.id.buttonNextSub)
 
         gameContinue()
+        startTimer()
 
         buttonOk.setOnClickListener {
 
@@ -81,19 +82,25 @@ class SubActivity : AppCompatActivity() {
                     textQuestion.text = "Sorry, your answer is wrong"
                     textLife.text = userLife.toString()
                 }
+                
+                if(userLife <= 0){
+                    Toast.makeText(applicationContext,"Game Over",Toast.LENGTH_LONG).show()
+                    val intent = Intent(this@SubActivity, ResultActivity::class.java)
+                    intent.putExtra("score",userScore)
+                    startActivity(intent)
+                    finish()
+                }
 
             }
 
         }
 
         buttonNext.setOnClickListener {
-
             pauseTimer()
             resetTimer()
-
             editTextAnswer.setText("")
 
-            if (userLife == 0)
+            if (userLife <= 0)
             {
                 Toast.makeText(applicationContext,"Game Over", Toast.LENGTH_LONG).show()
                 val intent = Intent(this@SubActivity, ResultActivity::class.java)
@@ -104,8 +111,8 @@ class SubActivity : AppCompatActivity() {
             else
             {
                 gameContinue()
+                startTimer()
             }
-
         }
 
     }
@@ -142,7 +149,6 @@ class SubActivity : AppCompatActivity() {
             }
 
             override fun onFinish() {
-
                 pauseTimer()
                 resetTimer()
                 updateText()
@@ -150,7 +156,14 @@ class SubActivity : AppCompatActivity() {
                 userLife--
                 textLife.text = userLife.toString()
                 textQuestion.text = "Sorry, Time is up!"
-
+                
+                if(userLife <= 0){
+                    Toast.makeText(applicationContext,"Game Over",Toast.LENGTH_LONG).show()
+                    val intent = Intent(this@SubActivity, ResultActivity::class.java)
+                    intent.putExtra("score",userScore)
+                    startActivity(intent)
+                    finish()
+                }
             }
 
 
